@@ -34,6 +34,12 @@ class ImageActivity : AppCompatActivity() {
         observeViewEvent()
     }
 
+    /**
+     * This method is used to handle view state for image activity
+     * If isLoading is true show the progress bar else hide it.
+     * If imageUrl is set with required url from response show the image
+     * inside image view using glide
+     */
     private fun observeViewState() {
         imageViewModel.viewState.observe(this, Observer {
             with(binding) {
@@ -43,7 +49,7 @@ class ImageActivity : AppCompatActivity() {
                 } else {
                     progressBar.visibility = View.GONE
                 }
-                //setImageUrl if response is successful else show error toast
+                //setImageUrl if imageUrl != ""
                 if (it.imageUrl != "") {
                     Glide.with(this@ImageActivity)
                             .load(it.imageUrl)
@@ -70,6 +76,11 @@ class ImageActivity : AppCompatActivity() {
         })
     }
 
+    /**
+     * This method handle view event for image activity
+     * If is downloaded is false then toast message is shown
+     * indicating that download failed.
+     */
     private fun handleViewEvents(events: Event<ImageViewEvents>) {
         events.getContentIfNotHandled()?.let {
             when (it) {

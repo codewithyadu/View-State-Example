@@ -22,6 +22,10 @@ class ImageViewModel() : ViewModel() {
         _viewState.value = ImageViewState()
     }
 
+    /**
+     * This method handles get image response and update the view state
+     * based on whether the response is successful or error response
+     */
     fun getImage(imageUseCase: ImageUseCase) {
         val newViewState = viewState.value?.copy(isLoading = true)
         _viewState.value = newViewState
@@ -30,6 +34,7 @@ class ImageViewModel() : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
+                    //Success block
                     val successViewState = viewState.value?.copy(
                         isLoading = false,
                         imageUrl = it[0].img
@@ -39,6 +44,7 @@ class ImageViewModel() : ViewModel() {
                     Log.d("response", it.toString())
                 },
                 {
+                    //Error block
                     val errorViewState = viewState.value?.copy(
                         isLoading = false,
                     )
