@@ -13,6 +13,8 @@ import com.example.viewstateforhandlingui.databinding.ActivityMainBinding
 import com.example.viewstateforhandlingui.imageActvity.repo.remote.ImageRepoImpl
 import com.example.viewstateforhandlingui.imageActvity.usecase.ImageUseCase
 import com.example.viewstateforhandlingui.imageActvity.usecase.ImageUseCaseImpl
+import com.example.viewstateforhandlingui.imageActvity.util.Event
+import com.example.viewstateforhandlingui.imageActvity.viewmodel.ImageViewEvents
 import com.example.viewstateforhandlingui.imageActvity.viewmodel.ImageViewModel
 
 class ImageActivity : AppCompatActivity() {
@@ -41,7 +43,7 @@ class ImageActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                 }
                 //setImageUrl if response is successful else show error toast
-                if (it.isResponseSuccessful) {
+                if (it.imageUrl != "") {
                     Glide.with(this@ImageActivity)
                             .load(it.imageUrl)
                             .into(imageView);
@@ -59,5 +61,23 @@ class ImageActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         imageViewModel.clearDisposable()
+    }
+
+    private fun observeViewEvent() {
+        imageViewModel.viewEvents.observe(this, Observer {
+            handleViewEvents(it)
+        })
+    }
+
+    private fun handleViewEvents(events: Event<ImageViewEvents>) {
+        events.getContentIfNotHandled()?.let {
+            when (it) {
+                is ImageViewEvents.ImageDownload -> {
+                    if (!it.isImageDownloaded) {
+                        Toast.makeText(this, "Image download failed", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 }
