@@ -31,6 +31,7 @@ class ImageActivity : AppCompatActivity() {
         }
         imageViewModel = ViewModelProviders.of(this).get(ImageViewModel::class.java)
         observeViewState()
+        observeViewEvent()
     }
 
     private fun observeViewState() {
