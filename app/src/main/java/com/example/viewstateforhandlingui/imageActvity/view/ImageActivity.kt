@@ -44,7 +44,6 @@ class ImageActivity : AppCompatActivity() {
                 if (it.isResponseSuccessful) {
                     Glide.with(this@ImageActivity)
                             .load(it.imageUrl)
-                            .centerCrop()
                             .into(imageView);
                 }
             }
